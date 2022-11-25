@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./card.css";
 import { Marker } from "@react-google-maps/api";
 import Geocode from "react-geocode";
+import { apiKey } from "./../../api/api";
 
 import pickUpBadgeBlank from "./../../assets/pickUpBadgeBlank.svg";
 import dropOffBadgeBlank from "./../../assets/dropOffBadgeBlank.svg";
@@ -13,7 +14,7 @@ import pickUpMarker from "./../../assets/pickUpMarker.svg";
 import dropOffMarker from "./../../assets/dropOffMarker.svg";
 
 function Card() {
-  Geocode.setApiKey("AIzaSyD_wZVx1K4lgUA7wlSDe-xlzzjQQADEdLY");
+  Geocode.setApiKey(apiKey);
 
   const [pickUpInputValue, setPickUpInputValue] = useState("");
   const [dropOffInputValue, setDropOffInputValue] = useState("");
@@ -37,12 +38,12 @@ function Card() {
 
   function validatePickUpInput() {
     if (pickUpInputValue === "29 Rue du 4 Septembre" || pickUpInputValue === "15 Rue de Bourgogne") {
-      setPickUpValidity(true);
       setPickUpBadge(pickUpBadgePresent);
 
       Geocode.fromAddress(pickUpInputValue).then(
         (response) => {
           setPickUpLatLon(response.results[0].geometry.location);
+          setPickUpValidity(true);
         },
         (error) => {
           console.error(error);
@@ -57,11 +58,11 @@ function Card() {
   function validateDropOffInput() {
     if (dropOffInputValue === "29 Rue du 4 Septembre" || dropOffInputValue === "15 Rue de Bourgogne") {
       setDropOffBadge(dropOffBadgePresent);
-      setDropOffValidity(true);
 
       Geocode.fromAddress(dropOffInputValue).then(
         (response) => {
           setDropOffLatLon(response.results[0].geometry.location);
+          setDropOffValidity(true);
         },
         (error) => {
           console.error(error);
@@ -125,8 +126,16 @@ function Card() {
           Create job
         </button>
       </div>
-      {pickUpValidity ? <Marker icon={pickUpMarker} position={pickUpLatLon}></Marker> : <></>}
-      {dropOffValidity ? <Marker icon={dropOffMarker} position={dropOffLatLon}></Marker> : <></>}
+      {pickUpValidity ? (
+        <Marker icon={pickUpMarker} position={{ lat: pickUpLatLon.lat, lng: pickUpLatLon.lng }}></Marker>
+      ) : (
+        <></>
+      )}
+      {dropOffValidity ? (
+        <Marker icon={dropOffMarker} position={{ lat: dropOffLatLon.lat, lng: dropOffLatLon.lng }}></Marker>
+      ) : (
+        <></>
+      )}
       <div className="toast" id="toast">
         <div className="toast-body">Job has been created successfully</div>
       </div>

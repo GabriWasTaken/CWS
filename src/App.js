@@ -2,6 +2,7 @@ import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import React from "react";
 import "./App.css";
 import Card from "./components/card/card";
+import { apiKey } from "./api/api";
 
 const center = {
   lat: 48.8698258,
@@ -11,7 +12,7 @@ const center = {
 function App() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyD_wZVx1K4lgUA7wlSDe-xlzzjQQADEdLY",
+    googleMapsApiKey: apiKey,
   });
 
   const onLoad = React.useCallback(function callback(map) {
